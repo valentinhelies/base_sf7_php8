@@ -1,0 +1,29 @@
+install:
+	docker compose up -d --build
+	docker compose run symfony composer install
+	docker compose run symfony npm install
+	docker compose run symfony npm run build
+	docker compose run symfony chmod -R 777 var translations
+
+start:
+	docker compose up -d
+
+stop:
+	docker compose down --remove-orphans
+
+console:
+	docker compose exec symfony bash
+
+prepare:
+	bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=test
+	bin/console doctrine:schema:validate --env=test
+	bin/console cache:clear
+	chmod -R 777 var translations
+
+test:
+	vendor/bin/phpstan analyse
+	cp phpunit.xml.dist phpunit.xml
+	bin/phpunit tests/
+
+cc:
+	bin/console cache:clear

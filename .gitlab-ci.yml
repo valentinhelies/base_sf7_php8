@@ -1,0 +1,48 @@
+image: jakzal/phpqa:php8.2
+
+cache:
+    paths:
+        - vendor/
+
+stages:
+    - CodingStandards
+    - UnitTests
+    - Deploy
+
+phpcs:
+    stage: CodingStandards
+    script:
+        - composer install
+        - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php .src/
+    allow_failure: false
+
+phpstan:
+    stage: CodingStandards
+    script:
+        - composer install
+        - phpstan analyse ./src
+    allow_failure: false
+
+twig-lint:
+    stage: CodingStandards
+    script:
+        - composer install
+        - twig-lint lint ./templates
+    allow_failure: false
+
+phpunit:
+    stage: UnitTests
+    script:
+        - composer install
+        - php bin/phpunit
+    allow_failure: false
+
+deployment:
+    stage: Deploy
+    environment:
+        name: staging
+        url: https://your_website_url.com
+    only:
+        - tags
+    script:
+        - sh scripts/install-git.sh
