@@ -13,7 +13,7 @@ phpcs:
     stage: CodingStandards
     script:
         - composer install
-        - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php .src/
+        - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
     allow_failure: false
 
 phpstan:
