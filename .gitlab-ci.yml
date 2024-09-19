@@ -1,4 +1,4 @@
-image: jakzal/phpqa:php8.2
+image: jakzal/phpqa:php8.3
 
 cache:
     paths:
@@ -16,18 +16,18 @@ phpcs:
         - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
     allow_failure: false
 
-phpstan:
-    stage: CodingStandards
-    script:
-        - composer install
-        - phpstan analyse ./src
-    allow_failure: false
-
 twig-lint:
     stage: CodingStandards
     script:
         - composer install
         - twig-lint lint ./templates
+    allow_failure: false
+
+phpstan:
+    stage: CodingStandards
+    script:
+        - composer install
+        - phpstan analyse ./src
     allow_failure: false
 
 phpunit:
@@ -37,12 +37,12 @@ phpunit:
         - php bin/phpunit
     allow_failure: false
 
-deployment:
-    stage: Deploy
-    environment:
-        name: staging
-        url: https://your_website_url.com
-    only:
-        - tags
-    script:
-        - sh scripts/install-git.sh
+#deployment:
+#    stage: Deploy
+#    environment:
+#        name: staging
+#        url: https://your_website_url.com
+#    only:
+#        - tags
+#    script:
+#        - sh scripts/install-git.sh
