@@ -24,7 +24,6 @@ test:
 	vendor/bin/phpcs
 	bin/console lint:twig templates
 	vendor/bin/phpstan analyse
-	cp phpunit.xml.dist phpunit.xml
 	bin/phpunit tests/
 
 cc:
